@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
-    <title>仲夏物語 · MP3 分享播放頁</title>
+    <title>允的藍莓音樂盒 · MP3 分享播放頁</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet" />
@@ -14,6 +14,7 @@
         color-scheme: light dark;
         --bg: #fdf1ec;
         --bg-dot: #f9dcd4;
+        --bg-dot-2: #d9ddf6;
         --surface: #fffaf6;
         --surface-2: #fdeef0;
         --ink: #5c4038;
@@ -31,6 +32,7 @@
         :root {
           --bg: #241a1c;
           --bg-dot: #332326;
+          --bg-dot-2: #2c3049;
           --surface: #2e2124;
           --surface-2: #3a2a2e;
           --ink: #f6e3dc;
@@ -49,7 +51,7 @@
       html, body { margin: 0; padding: 0; }
       body {
         background-color: var(--bg);
-        background-image: radial-gradient(var(--bg-dot) 2.2px, transparent 2.6px), radial-gradient(var(--bg-dot) 2.2px, transparent 2.6px);
+        background-image: radial-gradient(var(--bg-dot) 2.2px, transparent 2.6px), radial-gradient(var(--bg-dot-2) 2.2px, transparent 2.6px);
         background-size: 46px 46px;
         background-position: 0 0, 23px 23px;
         color: var(--ink);
@@ -76,6 +78,7 @@
         font-size: 15px;
       }
       .mascot { display: block; margin: 0 auto 4px; width: 148px; height: auto; }
+      .h1-berry { width: 27px; height: 27px; vertical-align: -5px; margin: 0 7px; }
       .lace-card { position: relative; }
       .lace-card::before {
         content: "";
@@ -320,6 +323,14 @@
           <ellipse cx="138" cy="132" rx="8.5" ry="5" fill="#f8b7c3" opacity="0.85"/>
           <path d="M94 126 q6 -5 12 0 q-1 6 -6 8 q-5 -2 -6 -8z" fill="#f28ba0"/>
           <path d="M100 134 q0 4 -4 5 M100 134 q0 4 4 5" stroke="#d97b8c" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <g transform="rotate(-13 44 70)">
+            <path d="M34 58 q10 -9 20 -3 q-5 7 -11 8 q-6 3 -9 -5z" fill="#8fae8a"/>
+            <circle cx="38" cy="76" r="10.5" fill="#54639f"/>
+            <circle cx="52" cy="70" r="9" fill="#6d7fc0"/>
+            <circle cx="47" cy="82" r="8.5" fill="#5b6fb4"/>
+            <path d="M38 68 l1.8 3.4 3.4 1.8 -3.4 1.8 -1.8 3.4 -1.8 -3.4 -3.4 -1.8 3.4 -1.8z" fill="#c3cdf0"/>
+            <path d="M52 63 l1.4 2.7 2.7 1.4 -2.7 1.4 -1.4 2.7 -1.4 -2.7 -2.7 -1.4 2.7 -1.4z" fill="#c3cdf0"/>
+          </g>
           <g transform="rotate(14 156 74)">
             <path d="M156 60 c10 -8 22 0 20 11 c-2 10 -12 17 -20 21 c-8 -4 -18 -11 -20 -21 c-2 -11 10 -19 20 -11z" fill="#e5506a"/>
             <path d="M142 62 q14 -10 28 0 q-7 6 -14 2 q-7 4 -14 -2z" fill="#8fae8a"/>
@@ -330,7 +341,7 @@
           <circle cx="100" cy="177" r="6.5" fill="#93b58d"/>
           <path d="M30 66 l2.6 5.6 5.6 2.6 -5.6 2.6 -2.6 5.6 -2.6 -5.6 -5.6 -2.6 5.6 -2.6z" fill="#f7d774"/>
         </svg>
-        <h1>仲夏物語 · 歌單</h1>
+        <h1><svg class="h1-berry" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 6 q8 -6 15 -1 q-4 6 -9 6 q-5 2 -6 -5z" fill="#8fae8a"/><circle cx="14" cy="19" r="9" fill="#54639f"/><circle cx="26" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="23" cy="26" r="7" fill="#5b6fb4"/><path d="M14 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg>允的藍莓音樂盒<svg class="h1-berry" viewBox="0 0 40 40" aria-hidden="true"><path d="M27 6 q-8 -6 -15 -1 q4 6 9 6 q5 2 6 -5z" fill="#8fae8a"/><circle cx="26" cy="19" r="9" fill="#54639f"/><circle cx="14" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="17" cy="26" r="7" fill="#5b6fb4"/><path d="M26 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg></h1>
         <p>14 首歌曲 · 點第一首開始，就會一首接一首連續播放到最後</p>
       </header>
 
