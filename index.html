@@ -5,46 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
-    <title>MP3 分享播放頁</title>
+    <title>仲夏物語 · MP3 分享播放頁</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet" />
     <style>
       :root {
         color-scheme: light dark;
-        --bg: #f6f1e7;
-        --surface: #fffdf8;
-        --surface-2: #efe7d8;
-        --ink: #2b2118;
-        --ink-soft: #6f6053;
-        --line: #ddd2bf;
-        --accent: #b4501e;
-        --accent-strong: #96400f;
-        --accent-soft: #f3ddcb;
-        --playing-bg: #f7e8d7;
-        --shadow: 0 10px 30px rgba(84, 54, 20, 0.12);
-        --lyric-dim: #a08d76;
+        --bg: #fdf1ec;
+        --bg-dot: #f9dcd4;
+        --surface: #fffaf6;
+        --surface-2: #fdeef0;
+        --ink: #5c4038;
+        --ink-soft: #b08679;
+        --line: #f3d2ca;
+        --accent: #e5506a;
+        --accent-strong: #c93a52;
+        --accent-soft: #fde3e8;
+        --playing-bg: #fdeef0;
+        --mint: #a9c6a4;
+        --shadow: 0 12px 32px rgba(214, 110, 120, 0.16);
+        --lyric-dim: #c4a198;
       }
       @media (prefers-color-scheme: dark) {
         :root {
-          --bg: #171310;
-          --surface: #221c17;
-          --surface-2: #2b231c;
-          --ink: #f0e6d8;
-          --ink-soft: #b3a28c;
-          --line: #3d332a;
-          --accent: #e07f3f;
-          --accent-strong: #f09552;
-          --accent-soft: #4a3220;
-          --playing-bg: #33261a;
-          --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-          --lyric-dim: #7d6c58;
+          --bg: #241a1c;
+          --bg-dot: #332326;
+          --surface: #2e2124;
+          --surface-2: #3a2a2e;
+          --ink: #f6e3dc;
+          --ink-soft: #c39a90;
+          --line: #4c363b;
+          --accent: #ef7d92;
+          --accent-strong: #f79cae;
+          --accent-soft: #4c2f38;
+          --playing-bg: #3d2b31;
+          --mint: #8fae8a;
+          --shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+          --lyric-dim: #96766e;
         }
       }
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
       body {
-        background: var(--bg);
+        background-color: var(--bg);
+        background-image: radial-gradient(var(--bg-dot) 2.2px, transparent 2.6px), radial-gradient(var(--bg-dot) 2.2px, transparent 2.6px);
+        background-size: 46px 46px;
+        background-position: 0 0, 23px 23px;
         color: var(--ink);
         font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -54,18 +61,29 @@
         margin: 0 auto;
         padding: 28px 20px 56px;
       }
-      header.page-head { margin-bottom: 22px; }
+      header.page-head { margin-bottom: 22px; text-align: center; }
       header.page-head h1 {
         font-family: "Noto Serif TC", serif;
         font-weight: 900;
         font-size: clamp(26px, 4vw, 36px);
         margin: 0 0 6px;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.06em;
+        color: var(--accent-strong);
       }
       header.page-head p {
         margin: 0;
         color: var(--ink-soft);
         font-size: 15px;
+      }
+      .mascot { display: block; margin: 0 auto 4px; width: 148px; height: auto; }
+      .lace-card { position: relative; }
+      .lace-card::before {
+        content: "";
+        position: absolute; top: 0; left: 0; right: 0; height: 14px;
+        background-image: radial-gradient(circle at 10px -3px, transparent 11px, var(--surface-2) 12px);
+        background-size: 20px 14px;
+        border-radius: 26px 26px 0 0;
+        pointer-events: none;
       }
       .layout {
         display: grid;
@@ -75,10 +93,10 @@
       }
       .player-card {
         background: var(--surface);
-        border: 1px solid var(--line);
-        border-radius: 18px;
+        border: 2px solid var(--line);
+        border-radius: 26px;
         box-shadow: var(--shadow);
-        padding: 26px 24px 22px;
+        padding: 32px 24px 22px;
         position: sticky;
         top: 20px;
       }
@@ -144,10 +162,12 @@
       .btn:focus-visible, .track:focus-visible, .lyric-line:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       .btn.main {
         width: 64px; height: 64px; min-width: 64px;
-        background: var(--accent); border-color: var(--accent); color: #fff8f0;
+        background: linear-gradient(160deg, #f4708a, var(--accent) 55%, var(--accent-strong));
+        border-color: var(--accent-strong); color: #fff;
         font-size: 24px;
+        box-shadow: 0 8px 20px rgba(229, 80, 106, 0.35);
       }
-      .btn.main:hover { background: var(--accent-strong); color: #fff; }
+      .btn.main:hover { background: linear-gradient(160deg, #f4708a, var(--accent-strong)); color: #fff; }
       .btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-strong); font-weight: 700; }
       .mode-group { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
       .mode-opt {
@@ -205,13 +225,13 @@
       .lyric-none { text-align: center; color: var(--ink-soft); padding: 30px 0; }
       .playlist-card {
         background: var(--surface);
-        border: 1px solid var(--line);
-        border-radius: 18px;
+        border: 2px solid var(--line);
+        border-radius: 26px;
         box-shadow: var(--shadow);
         overflow: hidden;
       }
       .playlist-head {
-        padding: 18px 22px 12px;
+        padding: 26px 22px 12px;
         display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
       }
       .playlist-head h2 { font-size: 17px; margin: 0; font-weight: 700; }
@@ -222,7 +242,7 @@
         width: 100%;
         padding: 11px 12px;
         border: none; background: transparent;
-        border-radius: 12px;
+        border-radius: 16px;
         cursor: pointer;
         text-align: left;
         font-family: inherit;
@@ -282,12 +302,40 @@
   <body>
     <div class="wrap">
       <header class="page-head">
-        <h1>歌單</h1>
+        <svg class="mascot" viewBox="0 0 200 196" role="img" aria-label="momo 草莓兔">
+          <ellipse cx="60" cy="36" rx="23" ry="35" transform="rotate(-11 60 36)" fill="#f6bfcd"/>
+          <ellipse cx="140" cy="36" rx="23" ry="35" transform="rotate(11 140 36)" fill="#f6bfcd"/>
+          <ellipse cx="60" cy="38" rx="12" ry="22" transform="rotate(-11 60 38)" fill="#fff2f4"/>
+          <ellipse cx="140" cy="38" rx="12" ry="22" transform="rotate(11 140 38)" fill="#fff2f4"/>
+          <circle cx="55" cy="30" r="2.2" fill="#f0a3b8"/><circle cx="64" cy="44" r="2.2" fill="#f0a3b8"/><circle cx="57" cy="52" r="2.2" fill="#f0a3b8"/>
+          <circle cx="145" cy="30" r="2.2" fill="#f0a3b8"/><circle cx="136" cy="44" r="2.2" fill="#f0a3b8"/><circle cx="143" cy="52" r="2.2" fill="#f0a3b8"/>
+          <circle cx="100" cy="114" r="67" fill="#f9d3dc"/>
+          <circle cx="100" cy="114" r="59" fill="#fff8f1"/>
+          <circle cx="100" cy="114" r="63" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-dasharray="0.1 10.9"/>
+          <path d="M46 96 a54 54 0 0 1 108 0 l0 -6 a12 12 0 0 1 -12 10 a12 12 0 0 1 -14 -8 a12 12 0 0 1 -14 8 a12 12 0 0 1 -14 -8 a12 12 0 0 1 -14 8 a12 12 0 0 1 -14 -8 a12 12 0 0 1 -14 8 a12 12 0 0 1 -12 -10 z" fill="#f6bfcd"/>
+          <ellipse cx="77" cy="118" rx="5.6" ry="7.4" fill="#3a2a28"/>
+          <ellipse cx="123" cy="118" rx="5.6" ry="7.4" fill="#3a2a28"/>
+          <circle cx="79" cy="115" r="2" fill="#fff"/><circle cx="125" cy="115" r="2" fill="#fff"/>
+          <ellipse cx="62" cy="132" rx="8.5" ry="5" fill="#f8b7c3" opacity="0.85"/>
+          <ellipse cx="138" cy="132" rx="8.5" ry="5" fill="#f8b7c3" opacity="0.85"/>
+          <path d="M94 126 q6 -5 12 0 q-1 6 -6 8 q-5 -2 -6 -8z" fill="#f28ba0"/>
+          <path d="M100 134 q0 4 -4 5 M100 134 q0 4 4 5" stroke="#d97b8c" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <g transform="rotate(14 156 74)">
+            <path d="M156 60 c10 -8 22 0 20 11 c-2 10 -12 17 -20 21 c-8 -4 -18 -11 -20 -21 c-2 -11 10 -19 20 -11z" fill="#e5506a"/>
+            <path d="M142 62 q14 -10 28 0 q-7 6 -14 2 q-7 4 -14 -2z" fill="#8fae8a"/>
+            <circle cx="150" cy="74" r="1.7" fill="#ffd9de"/><circle cx="160" cy="78" r="1.7" fill="#ffd9de"/><circle cx="155" cy="84" r="1.7" fill="#ffd9de"/>
+          </g>
+          <path d="M100 176 l-26 -11 q-4 12 0 22 z" fill="#a9c6a4"/>
+          <path d="M100 176 l26 -11 q4 12 0 22 z" fill="#a9c6a4"/>
+          <circle cx="100" cy="177" r="6.5" fill="#93b58d"/>
+          <path d="M30 66 l2.6 5.6 5.6 2.6 -5.6 2.6 -2.6 5.6 -2.6 -5.6 -5.6 -2.6 5.6 -2.6z" fill="#f7d774"/>
+        </svg>
+        <h1>仲夏物語 · 歌單</h1>
         <p>14 首歌曲 · 點第一首開始，就會一首接一首連續播放到最後</p>
       </header>
 
       <div class="layout">
-        <section class="player-card" aria-label="播放器">
+        <section class="player-card lace-card" aria-label="播放器">
           <p class="now-label">正在播放</p>
           <h2 class="now-title" id="nowTitle">同花順</h2>
           <p class="now-sub" id="nowSub">第 1 首 / 共 14 首</p>
@@ -334,7 +382,7 @@
           </div>
         </section>
 
-        <section class="playlist-card" aria-label="播放清單">
+        <section class="playlist-card lace-card" aria-label="播放清單">
           <div class="playlist-head">
             <h2>播放清單</h2>
             <span id="totalTime"></span>
