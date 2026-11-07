@@ -131,11 +131,19 @@
       .hero-sub { max-width: 34em; margin-left: auto; margin-right: auto; line-height: 1.65; }
       .hero-row { display: flex; align-items: center; justify-content: center; gap: 20px; text-align: left; }
       .face-wrap { position: relative; flex: none; }
-      .face-img {
-        display: block; width: 118px; height: 118px; border-radius: 50%;
-        box-shadow: 0 0 0 5px #ffffff, 0 0 0 7px var(--line), 0 14px 28px rgba(190, 90, 110, 0.25);
+      .face-wrap::before {
+        content: "";
+        position: absolute; inset: -6px;
+        background: #ffffff;
+        border: 2px solid var(--line);
+        border-radius: 50%;
+        box-shadow: 0 16px 30px rgba(190, 90, 110, 0.25);
       }
-      .face-berry { position: absolute; width: 40px; height: 40px; right: -10px; bottom: -6px; transform: rotate(10deg); filter: drop-shadow(0 3px 5px rgba(60, 50, 120, 0.35)); }
+      .face-img {
+        display: block; width: 106px; height: auto; border-radius: 50%;
+        position: relative; z-index: 1;
+      }
+      .face-berry { position: absolute; z-index: 2; width: 40px; height: 40px; right: -12px; bottom: -6px; transform: rotate(10deg); filter: drop-shadow(0 3px 5px rgba(60, 50, 120, 0.35)); }
       .hero-text { min-width: 0; }
       .hero-text .hero-kicker { margin: 0 0 5px; text-indent: 0; }
       .hero-text h1 { margin: 0 0 5px; }
@@ -143,7 +151,7 @@
       @media (max-width: 560px) {
         .hero-row { flex-direction: column; text-align: center; gap: 12px; }
         .hero-text .hero-kicker { text-indent: 0.38em; }
-        .face-img { width: 104px; height: 104px; }
+        .face-img { width: 96px; height: auto; }
       }
       .lace-card { position: relative; }
       .lace-card::before {
