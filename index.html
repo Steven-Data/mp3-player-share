@@ -229,6 +229,30 @@
       .track .t-title { flex: 1; font-size: 16px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .track.playing .t-title { color: var(--accent-strong); font-weight: 700; }
       .track .t-dur { color: var(--ink-soft); font-size: 13px; font-variant-numeric: tabular-nums; flex: none; }
+      ol.playlist li { display: flex; align-items: center; gap: 2px; }
+      .track { flex: 1; min-width: 0; }
+      .loop-toggle {
+        flex: none; width: 38px; height: 38px; margin-right: 4px;
+        border-radius: 50%; border: 1px solid var(--line);
+        background: transparent; color: var(--ink-soft);
+        font-size: 17px; line-height: 1; cursor: pointer; font-family: inherit;
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .loop-toggle:hover { border-color: var(--accent); color: var(--accent-strong); }
+      .loop-toggle.on { background: var(--accent); border-color: var(--accent); color: #fff8f0; }
+      .loop-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      .track.in-loop { box-shadow: inset 3px 0 0 var(--accent); background: var(--accent-soft); }
+      .track.in-loop.playing { background: var(--playing-bg); }
+      .loop-bar {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 0 22px 10px; font-size: 13px; color: var(--ink-soft); flex-wrap: wrap;
+      }
+      .loop-actions { display: inline-flex; gap: 6px; flex: none; }
+      .mini-btn {
+        border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+        border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; font-family: inherit;
+      }
+      .mini-btn:hover { border-color: var(--accent); color: var(--accent-strong); }
       .eq { display: none; align-items: flex-end; gap: 2px; height: 14px; flex: none; }
       .track.playing .eq { display: inline-flex; }
       .track.playing .num { display: none; }
@@ -302,6 +326,13 @@
             <h2>播放清單</h2>
             <span id="totalTime"></span>
           </div>
+          <div class="loop-bar">
+            <span id="loopInfo"></span>
+            <span class="loop-actions">
+              <button class="mini-btn" id="loopAllBtn" type="button">全選</button>
+              <button class="mini-btn" id="loopClearBtn" type="button">清除</button>
+            </span>
+          </div>
           <ol class="playlist" id="playlist"></ol>
         </section>
       </div>
@@ -331,12 +362,26 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
         var playlistEl = document.getElementById('playlist');
 
         var current = 0;
-        var mode = 'all'; // all | one | shuffle
+        var mode = 'all'; // all | selected | one | shuffle
         var speeds = [1, 1.25, 1.5, 0.75];
         var speedIdx = 0;
         var seeking = false;
         var currentLyricIdx = -1;
         var lyricEls = [];
+
+        // ---- 自選循環：使用者挑選要循環的歌曲，存在瀏覽器裡 ----
+        var LOOP_KEY = 'mp3-share-loop-set-v1';
+        var loopSet = new Set();
+        try {
+          var savedLoop = JSON.parse(localStorage.getItem(LOOP_KEY) || '[]');
+          if (Array.isArray(savedLoop)) savedLoop.forEach(function (n) {
+            if (typeof n === 'number' && n >= 0 && n < TRACKS.length) loopSet.add(n);
+          });
+        } catch (e) {}
+        function saveLoopSet() {
+          try { localStorage.setItem(LOOP_KEY, JSON.stringify(Array.from(loopSet))); } catch (e) {}
+        }
+        function selectedList() { return Array.from(loopSet).sort(function (a, b) { return a - b; }); }
 
         function fmt(sec) {
           if (!isFinite(sec) || sec < 0) sec = 0;
@@ -365,9 +410,46 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
           btn.querySelector('.t-title').textContent = track.title;
           btn.addEventListener('click', function () { loadTrack(i, true); });
           li.appendChild(btn);
+          var toggle = document.createElement('button');
+          toggle.className = 'loop-toggle';
+          toggle.type = 'button';
+          toggle.textContent = '↻';
+          toggle.setAttribute('aria-label', '把 ' + track.title + ' 加入自選循環');
+          toggle.title = '加入自選循環';
+          toggle.addEventListener('click', function () {
+            if (loopSet.has(i)) loopSet.delete(i); else loopSet.add(i);
+            saveLoopSet();
+            updateLoopUI();
+          });
+          li.appendChild(toggle);
           playlistEl.appendChild(li);
         });
         var trackEls = playlistEl.querySelectorAll('.track');
+        var loopToggles = playlistEl.querySelectorAll('.loop-toggle');
+        var loopInfo = document.getElementById('loopInfo');
+
+        function updateLoopUI() {
+          trackEls.forEach(function (el, j) { el.classList.toggle('in-loop', loopSet.has(j)); });
+          loopToggles.forEach(function (el, j) {
+            var on = loopSet.has(j);
+            el.classList.toggle('on', on);
+            el.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+          var n = loopSet.size;
+          loopInfo.textContent = n === 0
+            ? '點歌右邊的 ↻，挑你想循環聽的歌（沒選時，自選循環＝全部循環）'
+            : '自選循環已選 ' + n + ' 首' + (mode === 'selected' ? ' · 播放中' : ' · 把播放模式切到「自選循環」就會只播這幾首');
+        }
+        document.getElementById('loopAllBtn').addEventListener('click', function () {
+          TRACKS.forEach(function (_, j) { loopSet.add(j); });
+          saveLoopSet();
+          updateLoopUI();
+        });
+        document.getElementById('loopClearBtn').addEventListener('click', function () {
+          loopSet.clear();
+          saveLoopSet();
+          updateLoopUI();
+        });
 
         // ---- Lyrics ----
         function renderLyrics(track) {
@@ -454,16 +536,39 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
         playBtn.addEventListener('click', function () {
           if (audio.paused) { audio.play(); } else { audio.pause(); }
         });
+        function stepInSelection(dir) {
+          var list = selectedList();
+          if (!list.length) return null;
+          var pos = list.indexOf(current);
+          if (pos === -1) return dir > 0 ? list[0] : list[list.length - 1];
+          return list[(pos + dir + list.length) % list.length];
+        }
+        function nextIndex() {
+          if (mode === 'selected') {
+            var n = stepInSelection(1);
+            if (n !== null) return n;
+          }
+          return current + 1;
+        }
+        function prevIndex() {
+          if (mode === 'selected') {
+            var p = stepInSelection(-1);
+            if (p !== null) return p;
+          }
+          return current - 1;
+        }
         prevBtn.addEventListener('click', function () {
           if (audio.currentTime > 4) { audio.currentTime = 0; return; }
-          loadTrack(current - 1, true);
+          loadTrack(prevIndex(), true);
         });
-        nextBtn.addEventListener('click', function () { loadTrack(current + 1, true); });
+        nextBtn.addEventListener('click', function () { loadTrack(nextIndex(), true); });
 
         modeBtn.addEventListener('click', function () {
-          if (mode === 'all') { mode = 'one'; modeBtn.textContent = '單曲循環'; }
+          if (mode === 'all') { mode = 'selected'; modeBtn.textContent = '自選循環'; }
+          else if (mode === 'selected') { mode = 'one'; modeBtn.textContent = '單曲循環'; }
           else if (mode === 'one') { mode = 'shuffle'; modeBtn.textContent = '隨機播放'; }
           else { mode = 'all'; modeBtn.textContent = '循環全部'; }
+          updateLoopUI();
         });
         speedBtn.addEventListener('click', function () {
           speedIdx = (speedIdx + 1) % speeds.length;
@@ -504,7 +609,7 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
             }
             loadTrack(n, true);
           } else {
-            loadTrack(current + 1, true);
+            loadTrack(nextIndex(), true);
           }
         });
 
@@ -516,11 +621,12 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
         });
 
         if ('mediaSession' in navigator) {
-          navigator.mediaSession.setActionHandler('previoustrack', function () { loadTrack(current - 1, true); });
-          navigator.mediaSession.setActionHandler('nexttrack', function () { loadTrack(current + 1, true); });
+          navigator.mediaSession.setActionHandler('previoustrack', function () { loadTrack(prevIndex(), true); });
+          navigator.mediaSession.setActionHandler('nexttrack', function () { loadTrack(nextIndex(), true); });
         }
 
         audio.volume = 0.9;
+        updateLoopUI();
         loadTrack(0, false);
       })();
     </script>
