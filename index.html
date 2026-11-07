@@ -85,7 +85,7 @@
         border-radius: 30px;
         background: linear-gradient(165deg, #fff8f4 0%, var(--surface-2) 52%, #e8ebfa 135%);
         box-shadow: var(--shadow);
-        padding: 26px 20px 30px;
+        padding: 18px 22px 20px;
         overflow: hidden;
       }
       @media (prefers-color-scheme: dark) {
@@ -129,6 +129,22 @@
       .hero-badge.badge-a { left: -10px; top: 44%; transform: rotate(-6deg); }
       .hero-badge.badge-b { right: -8px; bottom: 15%; transform: rotate(5deg); }
       .hero-sub { max-width: 34em; margin-left: auto; margin-right: auto; line-height: 1.65; }
+      .hero-row { display: flex; align-items: center; gap: 20px; text-align: left; }
+      .face-wrap { position: relative; flex: none; }
+      .face-img {
+        display: block; width: 118px; height: 118px; border-radius: 50%;
+        box-shadow: 0 0 0 5px #ffffff, 0 0 0 7px var(--line), 0 14px 28px rgba(190, 90, 110, 0.25);
+      }
+      .face-berry { position: absolute; width: 40px; height: 40px; right: -10px; bottom: -6px; transform: rotate(10deg); filter: drop-shadow(0 3px 5px rgba(60, 50, 120, 0.35)); }
+      .hero-text { min-width: 0; }
+      .hero-text .hero-kicker { margin: 0 0 5px; text-indent: 0; }
+      .hero-text h1 { margin: 0 0 5px; }
+      .hero-panel .hero-sub { margin: 0; max-width: none; }
+      @media (max-width: 560px) {
+        .hero-row { flex-direction: column; text-align: center; gap: 12px; }
+        .hero-text .hero-kicker { text-indent: 0.38em; }
+        .face-img { width: 104px; height: 104px; }
+      }
       .lace-card { position: relative; }
       .lace-card::before {
         content: "";
@@ -356,16 +372,17 @@
     <div class="wrap">
       <header class="page-head">
         <div class="hero-panel">
-          <p class="hero-kicker">MOMO · 仲夏物語</p>
-          <div class="hero-photo-wrap">
-            <img class="hero-photo" src="momo-hero-yun.jpg" alt="仲夏物語 momo 藍莓音樂盒主視覺" />
-            <svg class="hero-berry hb-tl" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 6 q8 -6 15 -1 q-4 6 -9 6 q-5 2 -6 -5z" fill="#8fae8a"/><circle cx="14" cy="19" r="9" fill="#54639f"/><circle cx="26" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="23" cy="26" r="7" fill="#5b6fb4"/><path d="M14 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg>
-            <svg class="hero-berry hb-br" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 6 q8 -6 15 -1 q-4 6 -9 6 q-5 2 -6 -5z" fill="#8fae8a"/><circle cx="14" cy="19" r="9" fill="#54639f"/><circle cx="26" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="23" cy="26" r="7" fill="#5b6fb4"/><path d="M14 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg>
-            <span class="hero-badge badge-a">藍莓限定</span>
-            <span class="hero-badge badge-b">14 首歌曲</span>
+          <div class="hero-row">
+            <div class="face-wrap">
+              <img class="face-img" src="momo-face.png" alt="仲夏物語 momo" />
+              <svg class="face-berry" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 6 q8 -6 15 -1 q-4 6 -9 6 q-5 2 -6 -5z" fill="#8fae8a"/><circle cx="14" cy="19" r="9" fill="#54639f"/><circle cx="26" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="23" cy="26" r="7" fill="#5b6fb4"/><path d="M14 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg>
+            </div>
+            <div class="hero-text">
+              <p class="hero-kicker">MOMO · 仲夏物語</p>
+              <h1><svg class="h1-berry" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 6 q8 -6 15 -1 q-4 6 -9 6 q-5 2 -6 -5z" fill="#8fae8a"/><circle cx="14" cy="19" r="9" fill="#54639f"/><circle cx="26" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="23" cy="26" r="7" fill="#5b6fb4"/><path d="M14 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg>允的藍莓音樂盒<svg class="h1-berry" viewBox="0 0 40 40" aria-hidden="true"><path d="M27 6 q-8 -6 -15 -1 q4 6 9 6 q5 2 6 -5z" fill="#8fae8a"/><circle cx="26" cy="19" r="9" fill="#54639f"/><circle cx="14" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="17" cy="26" r="7" fill="#5b6fb4"/><path d="M26 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg></h1>
+              <p class="hero-sub">為允準備的仲夏歌單 · 點第一首開始，就會一首接一首連續播放到最後</p>
+            </div>
           </div>
-          <h1><svg class="h1-berry" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 6 q8 -6 15 -1 q-4 6 -9 6 q-5 2 -6 -5z" fill="#8fae8a"/><circle cx="14" cy="19" r="9" fill="#54639f"/><circle cx="26" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="23" cy="26" r="7" fill="#5b6fb4"/><path d="M14 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg>允的藍莓音樂盒<svg class="h1-berry" viewBox="0 0 40 40" aria-hidden="true"><path d="M27 6 q-8 -6 -15 -1 q4 6 9 6 q5 2 6 -5z" fill="#8fae8a"/><circle cx="26" cy="19" r="9" fill="#54639f"/><circle cx="14" cy="15" r="7.5" fill="#6d7fc0"/><circle cx="17" cy="26" r="7" fill="#5b6fb4"/><path d="M26 12.5 l1.5 2.9 2.9 1.5 -2.9 1.5 -1.5 2.9 -1.5 -2.9 -2.9 -1.5 2.9 -1.5z" fill="#c3cdf0"/></svg></h1>
-          <p class="hero-sub">為允準備的仲夏歌單 · 點第一首開始，就會一首接一首連續播放到最後</p>
         </div>
       </header>
 
