@@ -547,7 +547,10 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
         }
 
         playBtn.addEventListener('click', function () {
-          if (audio.paused) { audio.play(); } else { audio.pause(); }
+          if (audio.paused) {
+            if (mode === 'selected' && jumpToFirstSelected(true)) return;
+            audio.play();
+          } else { audio.pause(); }
         });
         function stepInSelection(dir) {
           var list = selectedList();
@@ -576,9 +579,16 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
         });
         nextBtn.addEventListener('click', function () { loadTrack(nextIndex(), true); });
 
+        function jumpToFirstSelected(autoplay) {
+          var list = selectedList();
+          if (!list.length || loopSet.has(current)) return false;
+          loadTrack(list[0], autoplay);
+          return true;
+        }
         function setMode(m) {
           mode = m;
           modeOpts.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-mode') === m); });
+          if (m === 'selected') jumpToFirstSelected(!audio.paused);
           updateLoopUI();
         }
         modeOpts.forEach(function (b) {
