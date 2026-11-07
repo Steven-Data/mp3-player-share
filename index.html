@@ -149,6 +149,14 @@
       }
       .btn.main:hover { background: var(--accent-strong); color: #fff; }
       .btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-strong); font-weight: 700; }
+      .mode-group { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+      .mode-opt {
+        border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+        border-radius: 999px; padding: 9px 13px; font-size: 14px; cursor: pointer; font-family: inherit;
+      }
+      .mode-opt:hover { border-color: var(--accent); color: var(--accent-strong); }
+      .mode-opt.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-strong); font-weight: 700; }
+      .mode-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       .sub-controls {
         display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;
         margin-top: 12px;
@@ -304,7 +312,12 @@
           </div>
 
           <div class="sub-controls">
-            <button class="btn active" id="modeBtn" title="播放模式">循環全部</button>
+            <div class="mode-group" role="group" aria-label="播放模式">
+              <button class="mode-opt active" type="button" data-mode="all">循環全部</button>
+              <button class="mode-opt" type="button" data-mode="selected">自選循環</button>
+              <button class="mode-opt" type="button" data-mode="one">單曲循環</button>
+              <button class="mode-opt" type="button" data-mode="shuffle">隨機播放</button>
+            </div>
             <button class="btn" id="speedBtn" title="播放速度">1× 速度</button>
             <span class="vol">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
@@ -350,7 +363,7 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
         var pauseIcon = document.getElementById('pauseIcon');
         var prevBtn = document.getElementById('prevBtn');
         var nextBtn = document.getElementById('nextBtn');
-        var modeBtn = document.getElementById('modeBtn');
+        var modeOpts = document.querySelectorAll('.mode-opt');
         var speedBtn = document.getElementById('speedBtn');
         var seek = document.getElementById('seek');
         var curTimeEl = document.getElementById('curTime');
@@ -563,12 +576,13 @@ const TRACKS = [{"title": "同花順", "src": "01-同花順.mp3", "dur": 232.96,
         });
         nextBtn.addEventListener('click', function () { loadTrack(nextIndex(), true); });
 
-        modeBtn.addEventListener('click', function () {
-          if (mode === 'all') { mode = 'selected'; modeBtn.textContent = '自選循環'; }
-          else if (mode === 'selected') { mode = 'one'; modeBtn.textContent = '單曲循環'; }
-          else if (mode === 'one') { mode = 'shuffle'; modeBtn.textContent = '隨機播放'; }
-          else { mode = 'all'; modeBtn.textContent = '循環全部'; }
+        function setMode(m) {
+          mode = m;
+          modeOpts.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-mode') === m); });
           updateLoopUI();
+        }
+        modeOpts.forEach(function (b) {
+          b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); });
         });
         speedBtn.addEventListener('click', function () {
           speedIdx = (speedIdx + 1) % speeds.length;
